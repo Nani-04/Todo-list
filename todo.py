@@ -4,7 +4,8 @@ def show_menu():
     print("1. View To-Do List")
     print("2. Add Task")
     print("3. Mark Task as Done")
-    print("4. Save and Quit")
+    print("4. Mark Multiple Tasks as Done")
+    print("5. Save and Quit")
 
 def view_todo_list(todo_list):
     print("\n--- To-Do List ---")
@@ -23,6 +24,20 @@ def mark_task_as_done(todo_list, task_index):
     else:
         print("Invalid task index. Please try again.")
 
+def mark_multiple_tasks_as_done(todo_list, task_indices):
+    completed_tasks = []
+    for index in task_indices:
+        if 1 <= index <= len(todo_list):
+            completed_tasks.append(todo_list[index - 1])
+            todo_list[index - 1] = f"[Done] {todo_list[index - 1]}"
+        else:
+            print(f"Invalid task index {index}. Skipping.")
+
+    if completed_tasks:
+        print(f"Marked tasks as done: {', '.join(completed_tasks)}")
+    else:
+        print("No tasks marked as done.")
+
 def save_to_file(todo_list, filename="todo_list.txt"):
     with open(filename, "w") as file:
         for task in todo_list:
@@ -40,7 +55,7 @@ def main():
 
     while True:
         show_menu()
-        choice = input("Enter your choice (1-4): ")
+        choice = input("Enter your choice (1-5): ")
 
         if choice == "1":
             view_todo_list(todo_list)
@@ -51,6 +66,10 @@ def main():
             task_index = int(input("Enter the task index to mark as done: "))
             mark_task_as_done(todo_list, task_index)
         elif choice == "4":
+            task_indices_str = input("Enter the task indices to mark as done (comma-separated): ")
+            task_indices = [int(index.strip()) for index in task_indices_str.split(",")]
+            mark_multiple_tasks_as_done(todo_list, task_indices)
+        elif choice == "5":
             save_to_file(todo_list)
             print("To-Do List saved. Quitting.")
             break
